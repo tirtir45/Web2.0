@@ -1,0 +1,16 @@
+{% if author is empty %}
+   
+    <p>Auteur introuvable.</p>
+
+{% else %}
+
+    <p>Détails de l'auteur</p>
+
+    <img src="{{ author.picture }}" alt="{{ author.username }}">   
+    <br>
+    <p>Nom :</p> {{ author.username }} 
+    <br>
+    <p>Email :</p> {{ author.email }} 
+    <br>
+    <p>Nombre de livres :</p> {{ author.nb_books }} <br>
+{% endif %}
