@@ -14,6 +14,7 @@
                     <th>ID</th>
                     <th>Username</th>
                     <th>Email</th>
+                    <th>Number of Books</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -23,14 +24,16 @@
                         <td>{{ author.id }}</td>
                         <td>{{ author.username }}</td>
                         <td>{{ author.email }}</td>
+                        <td>{{ author.nbBooks }}</td>
                         <td>
                             <a href="{{ path('app_author_edit', {'id': author.id}) }}">Edit</a>
-                            <a href="{{ path('app_author_delete', {'id': author.id}) }}">Delete</a>
+                            <a href="{{ path('app_author_deleteb', {'id': author.id}) }}" class="btn btn-sm btn-danger" 
+                               onclick="return confirm('this author has books')">Delete</a>
                         </td>
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="4" class="text-center">No authors found</td>
+                        <td colspan="5" class="text-center">No authors found</td>
                     </tr>
                 {% endfor %}
             </tbody>

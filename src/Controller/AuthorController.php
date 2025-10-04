@@ -10,7 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
-use App\Form\AuthorType; // Add this import
+use App\Form\AuthorType;
+use App\Form\AuthorEditType;
 
 final class AuthorController extends AbstractController
 {
@@ -100,4 +101,24 @@ final class AuthorController extends AbstractController
 
         return $this->redirectToRoute('app_author');
     }
+
+    //delete author based on nbBooks
+    #[Route('/author/deleteb/{id}', name: 'app_author_deleteb')]
+    public function deleteB(int $id, Request $request, EntityManagerInterface $entityManager, AuthorRepository $authorRepository): Response
+    {
+        $author = $authorRepository->find($id);
+        if (!$author) {
+            throw $this->createNotFoundException('Author not found');
+        }
+
+        if ($author->getNbBooks() > 0) {
+            return $this->redirectToRoute('app_author');
+        }
+
+        $entityManager->remove($author);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_author');
+    }
+
 }
