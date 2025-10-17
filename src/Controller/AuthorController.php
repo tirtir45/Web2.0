@@ -31,12 +31,12 @@ final class AuthorController extends AbstractController
     {
         $authors=$authorRepository->findAll();
 
-        return $this->render('author/display.html.twig', [
+        return $this->render('author/index.html.twig', [
             'authors' => $authors,
         ]);
     }
 
-    /*---------------------------PARTIE STATIQUE-----------------------------------------------*/
+    /*---------------------------PARTIE STATIQUE-----------------------------------------------
     //ajout
     #[Route('/author/add', name: 'add_author')]
     public function add(EntityManagerInterface $entityManager): Response
@@ -86,5 +86,69 @@ final class AuthorController extends AbstractController
         $em->flush();
         return new Response('auteur modifié');
         return $this->redirectToRoute('get_author');
+    }*/
+
+    /*---------------------------PARTIE DYNAMIQUE-----------------------------------------------*/
+    //ajout form
+    #[Route('/author/addf', name: 'app_author_addform')]
+    public function addF(Request $request, EntityManagerInterface $entityManager): Response {
+    
+        $author= new Author(); //empty instance
+        $form = $this->createForm(AuthorType::class, $author /*win bch titzed il data ili bch n3amrha fil form*/);
+        $form->handleRequest($request);
+        
+        //form valide or nah
+        if($form->isSubmitted() && $form->isValid()){
+            $entityManager->persist($author); //to save the entity
+            $entityManager->flush(); //sync 
+            return $this->redirectToRoute('app_author');
+        }
+
+        return $this->render('author/addf.html.twig', [
+            'form' => $form->createView(),
+        ]);
+        
     }
+
+    //edit 
+    #[Route('/author/edit/{id}', name: 'app_author_edit')]
+    public function editA(int $id, Request $request, EntityManagerInterface $entityManager, AuthorRepository $authorRepository): Response
+    {
+
+        $author = $authorRepository->find($id);
+        if (!$author) {
+            throw $this->createNotFoundException('Author not found');
+        }
+
+        $form = $this->createForm(AuthorType::class, $author);
+        $form->handleRequest($request);
+
+        //form valide or nah
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+            return $this->redirectToRoute('app_author');
+        }
+        
+        return $this->render('author/edit.html.twig', [
+            'form' => $form->createView(),
+            'author' => $author,
+        ]);
+    }
+    
+    //delete author based on nbBooks
+    #[Route('/author/deleteb/{id}', name: 'app_author_deleteb')]
+    public function deleteB(int $id, Request $request, EntityManagerInterface $entityManager, AuthorRepository $authorRepository): Response
+    {
+        $author = $authorRepository->find($id);
+
+        if ($author->getNbBooks() > 0) {
+            return $this->redirectToRoute('app_author');
+        }
+
+        $entityManager->remove($author);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_author');
+    }
+
 }

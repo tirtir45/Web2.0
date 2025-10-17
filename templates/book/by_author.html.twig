@@ -1,0 +1,19 @@
+<h1>Books for author #{{ authorId }}</h1>
+
+<h2>DQL ({{ booksDql|length }} results)</h2>
+<ul>
+  {% for book in booksDql %}
+    <li>{{ book.title }} (id={{ book.id }})</li>
+  {% else %}
+    <li>No books found (DQL)</li>
+  {% endfor %}
+</ul>
+
+<h2>QueryBuilder ({{ booksQb|length }} results)</h2>
+<ul>
+  {% for book in booksQb %}
+    <li>{{ book.title }} (id={{ book.id }})</li>
+  {% else %}
+    <li>No books found (QueryBuilder)</li>
+  {% endfor %}
+</ul>

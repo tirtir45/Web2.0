@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\BookRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -29,6 +31,17 @@ class Book
 
     #[ORM\Column(length: 255)]
     private ?string $category = null;
+
+    /**
+     * @var Collection<int, Reader>
+     */
+    #[ORM\ManyToMany(targetEntity: Reader::class, mappedBy: 'Read_book')]
+    private Collection $readers;
+
+    public function __construct()
+    {
+        $this->readers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -91,6 +104,33 @@ class Book
     public function setCategory(string $category): static
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reader>
+     */
+    public function getReaders(): Collection
+    {
+        return $this->readers;
+    }
+
+    public function addReader(Reader $reader): static
+    {
+        if (!$this->readers->contains($reader)) {
+            $this->readers->add($reader);
+            $reader->addReadBook($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReader(Reader $reader): static
+    {
+        if ($this->readers->removeElement($reader)) {
+            $reader->removeReadBook($this);
+        }
 
         return $this;
     }
