@@ -9,6 +9,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class BookType extends AbstractType
 {
@@ -31,6 +32,9 @@ class BookType extends AbstractType
                 'class' => Author::class,
                 'choice_label' => 'username',
             ])
+            ->add ('submit', SubmitType::class, [
+                'label' => 'Create Author'
+            ]  )
         ;
     }
 

@@ -98,7 +98,7 @@ final class AuthorController extends AbstractController
         $form->handleRequest($request);
         
         //form valide or nah
-        if($form->isSubmitted() && $form->isValid()){
+        if($form->isSubmitted()){
             $entityManager->persist($author); //to save the entity
             $entityManager->flush(); //sync 
             return $this->redirectToRoute('app_author');
@@ -124,7 +124,7 @@ final class AuthorController extends AbstractController
         $form->handleRequest($request);
 
         //form valide or nah
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
             $entityManager->flush();
             return $this->redirectToRoute('app_author');
         }

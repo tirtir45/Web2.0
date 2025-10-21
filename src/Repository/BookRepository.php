@@ -45,8 +45,8 @@ class BookRepository extends ServiceEntityRepository
     public function getNbrBooksDQL(): int
     {
         $em=$this->getEntityManager();
-        $dql="SELECT COUNT(b.id) FROM App\Entity\Book b";
-        return (int) $em->createQuery($dql)->getSingleScalarResult();
+        $query=$em->createQuery("SELECT COUNT(b.id) FROM App\Entity\Book b");
+        return $query->getSingleScalarResult();
     }
 
     //query builder method getnbrbooks
@@ -61,10 +61,9 @@ class BookRepository extends ServiceEntityRepository
     //DQL method getbooksbyauthor
     public function getBooksByAuthorDQL(int $authorId): array{
         $em=$this->getEntityManager();
-        $dql="SELECT b FROM App\Entity\Book b JOIN b.author_b a WHERE a.id = :authorId";
-        return $em->createQuery($dql)
-            ->setParameter('authorId',$authorId)
-            ->getResult();
+        $query=$em->createQuery("SELECT b FROM App\Entity\Book b JOIN b.author_b a WHERE a.id = :authorId");
+            $query->setParameter('authorId',$authorId);
+            return $query->getResult();
     }
 
     //query builder method getbooksbyauthor

@@ -36,7 +36,7 @@ final class BookController extends AbstractController
         $form->handleRequest($request);
 
         //form valide or nah
-        if($form->isSubmitted() && $form->isValid()){
+        if($form->isSubmitted()){
             
             if ($book->isEnabled()) {
                 $author = $book->getAuthorB();
@@ -79,7 +79,7 @@ final class BookController extends AbstractController
         $form->handleRequest($request);
 
         //form valide or nah
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
             $entityManager->flush();
             
             return $this->redirectToRoute('app_book_list');
